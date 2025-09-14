@@ -1,0 +1,195 @@
+# Thai Messages for NPCPlugin
+# ================================================================
+
+# Sell System Messages
+sell-success: "&aคุณขายของได้เงิน &e{total_price} บาท&a!"
+sell-failed: "&cการขายของล้มเหลว!"
+no-items: "&cคุณต้องใส่ของในช่องขายก่อน!"
+npc-disabled: "&cNPC นี้ถูกปิดการใช้งานแล้ว!"
+sell-system-disabled: "&cระบบขายของถูกปิดการใช้งาน!"
+
+# Limits & Cooldowns
+daily-limit-reached: "&cคุณขายของถึงขิดจำกัดรายวันแล้ว &e{daily_limit} บาท&c!"
+cooldown-active: "&cกรุณารอ &e{cooldown} วินาที &cก่อนขายของอีกครั้ง!"
+confirmation-required: "&eคุณกำลังจะขายของมูลค่า &6{total_price} บาท&e &nคลิกอีกครั้งเพื่อยืนยัน!"
+category-sold: "&aขาย&e{category}&aทั้งหมดได้เงิน &e{total_price} บาท&a!"
+
+# GUI Messages
+gui-category-ores: "&6แร่ธาตุและอัญมณี"
+gui-category-food: "&aอาหารและพืชผล"
+gui-category-tools: "&bเครื่องมือและอาวุธ"
+gui-category-blocks: "&7บล็อกและวัสดุ"
+gui-category-misc: "&dของเบ็ดเตล็ด"
+
+gui-button-sell-all: "&a&lขายทั้งหมด"
+gui-button-sell-category: "&6&lขายตามหมวดหมู่"
+gui-button-price-info: "&e&lข้อมูลราคา"
+gui-button-compare-prices: "&b&lเปรียบเทียบราคา"
+gui-button-close: "&c&lปิด"
+
+gui-lore-sell-all:
+  - "&7ใส่ของในช่องด้านบน"
+  - "&7แล้วคลิกที่นี่เพื่อขาย!"
+  - ""
+  - "&aมูลค่ารวม: &e฿0.00"
+  - ""
+  - "&eคลิกเพื่อขาย!"
+
+gui-lore-category-sell:
+  - "&7ขายของทั้งหมดในหมวดหมู่นี้"
+  - "&7จากกระเป๋าของคุณ"
+  - ""
+  - "&eคลิกเพื่อขายทั้งหมด!"
+
+gui-lore-price-info:
+  - "&7ดูราคาสินค้าของ NPC นี้"
+  - ""
+  - "&eคลิกเพื่อดูราคา!"
+
+gui-lore-compare-prices:
+  - "&7เปรียบเทียบราคากับ NPC อื่น"
+  - ""
+  - "&eคลิกเพื่อเปรียบเทียบ!"
+
+gui-lore-close:
+  - "&7คลิกเพื่อปิดเมนู"
+
+# NPC Interaction Messages
+npc-greeting-default: "&aสวัสดี! คลิกขวาเพื่อขายของ!"
+npc-no-permission: "&cคุณไม่มีสิทธิ์ในการค้าขายกับ NPC!"
+npc-not-found: "&cไม่พบ NPC ในบริเวณใกล้เคียง!"
+npc-get-closer: "&7เข้าใกล้ NPC หรือระบุ ID: &e/sellnpc <id>"
+
+# Item Validation Messages
+item-not-sellable: "&cNPC นี้ไม่รับซื้อ {item_name}!"
+item-damaged-warning: "&eของชิ้นนี้เสียหายและจะขายได้ราคาต่ำกว่าปกติ!"
+inventory-full-warning: "&cกระเป๋าของคุณเต็ม! บางของอาจจะหล่นลงพื้น"
+
+# Command Messages
+command-no-permission: "&cคุณไม่มีสิทธิ์ใช้คำสั่งนี้!"
+command-only-players: "&cเฉพาะผู้เล่นเท่านั้นที่ใช้คำสั่งนี้ได้!"
+command-invalid-usage: "&cการใช้งานผิด! ใช้ &e{usage}"
+command-npc-not-found: "&cไม่พบ NPC '{npc_id}'!"
+command-npc-already-exists: "&cมี NPC ที่มี ID '{npc_id}' อยู่แล้ว!"
+command-invalid-npc-id: "&cID ของ NPC ไม่ถูกต้อง! ใช้เฉพาะตัวอักษร ตัวเลข และขีดล่าง"
+
+# Creation & Management
+npc-created: "&aสร้าง NPC '{npc_id}' สำเร็จ ชื่อ: &e{npc_name}"
+npc-removed: "&aลบ NPC '{npc_id}' สำเร็จ"
+npc-toggled-enabled: "&aNPC '{npc_id}' ตอนนี้ &aเปิดใช้งาน"
+npc-toggled-disabled: "&aNPC '{npc_id}' ตอนนี้ &cปิดใช้งาน"
+npc-teleported: "&aเทเลพอร์ตไปยัง NPC '{npc_id}' แล้ว!"
+npc-updated: "&aอัพเดท {property} ของ NPC '{npc_id}' แล้ว"
+
+# System Messages
+system-reloading: "&eกำลังโหลดระบบ NPC ใหม่..."
+system-reloaded: "&aโหลดระบบ NPC ใหม่สำเร็จ! ({duration}ms)"
+system-reload-error: "&cเกิดข้อผิดพลาดในการโหลดระบบ NPC: {error}"
+system-validating: "&eกำลังตรวจสอบ NPC ทั้งหมด..."
+system-validated: "&aตรวจสอบ NPC เสร็จสิ้น! ({duration}ms)"
+
+# Statistics Messages
+stats-daily-interactions: "&eการโต้ตอบรายวัน: &a{count}"
+stats-total-npcs: "&aNPC ทั้งหมด: &a{count}"
+stats-enabled-npcs: "&aNPC ที่เปิดใช้งาน: &a{count}"
+stats-last-interaction: "&eการโต้ตอบครั้งล่าสุด: &a{time}"
+stats-never: "&7ไม่เคย"
+stats-reset: "&aรีเซ็ตสถิติของ {target} แล้ว!"
+
+# Price Information
+price-info-header: "&6=== ข้อมูลราคา ==="
+price-info-trading-with: "&eกำลังค้าขายกับ: &a{npc_name}"
+price-info-item-format: "&b{item_name}: &a฿{price}"
+price-info-no-prices: "&7ไม่มีสินค้าที่ขายให้ NPC นี้ได้"
+price-info-put-items: "&7ใส่ของในกล่องเพื่อดูราคาที่แน่นอน!"
+
+# Price Comparison
+price-comparison-header: "&6=== เปรียบเทียบราคา ==="
+price-comparison-item-header: "&e{item_name}:"
+price-comparison-no-buyers: "&7ไม่มี NPC รับซื้อสินค้านี้"
+price-comparison-format: "&b  {npc_name}: &a฿{price}"
+
+# Error Messages
+error-occurred: "&cเกิดข้อผิดพลาด: {error}"
+error-gui: "&cเกิดข้อผิดพลาดกับหน้าต่างขาย กรุณาลองใหม่"
+error-effects: "&cเกิดข้อผิดพลาดในการเล่น {effect_type}: {error}"
+error-hologram: "&cเกิดข้อผิดพลาดกับระบบ hologram: {error}"
+
+# Success Messages
+effects-played: "&aเล่นเอฟเฟ็ก {effect_type} ให้ NPC '{npc_id}' แล้ว"
+hologram-updated: "&aอัพเดท hologram ของ NPC '{npc_id}' แล้ว"
+config-reloaded: "&aโหลดการตั้งค่าใหม่สำเร็จ!"
+
+# Validation Messages
+validation-invalid-world: "&cโลก '{world}' ไม่ถูกต้องสำหรับ NPC '{npc_id}'"
+validation-invalid-entity: "&cประเภทตัวละคร '{entity_type}' ไม่ถูกต้องสำหรับ NPC '{npc_id}'"
+validation-respawned: "&aเรียก NPC กลับมา {count} ตัว"
+
+# Help Messages
+help-header: "&6=== คำสั่ง NPC ==="
+help-create: "&e/npc create <id> <ชื่อ> &7- สร้าง NPC ใหม่"
+help-remove: "&e/npc remove <id> &7- ลบ NPC"
+help-list: "&e/npc list [filter] &7- แสดงรายการ NPC"
+help-toggle: "&e/npc toggle <id> &7- เปิด/ปิด NPC"
+help-info: "&e/npc info [id] &7- แสดงข้อมูล NPC"
+help-reload: "&e/npc reload &7- โหลดระบบ NPC ใหม่"
+help-validate: "&e/npc validate &7- ตรวจสอบและเรียก NPC กลับ"
+help-teleport: "&e/npc teleport <id> &7- เทเลพอร์ตไปหา NPC"
+help-stats: "&e/npc stats [id] &7- แสดงสถิติ"
+help-edit: "&e/npc edit <id> <property> <value> &7- แก้ไข NPC"
+help-effects: "&e/npc effects <id> <type> &7- ทดสอบเอฟเฟ็ก"
+help-footer: "&7ใช้ &e/sellnpc &7เพื่อค้าขายกับ NPC"
+
+# List Command
+list-header: "&6=== NPC ({shown}/{total}) ==="
+list-no-npcs: "&eไม่พบ NPC"
+list-no-filter-match: "&eไม่พบ NPC ที่ตรงกับตัวกรอง: {filter}"
+list-format: "&b{npc_id} &f- {npc_name} {status}{interactions}"
+list-interactions-format: "&a ({count} ครั้ง)"
+
+# Info Display
+info-system-header: "&6=== ข้อมูลระบบ NPC ==="
+info-npc-header: "&6=== ข้อมูล NPC: {npc_id} ==="
+info-total-npcs: "&eNPC ทั้งหมด: &a{count}"
+info-enabled-npcs: "&eNPC ที่เปิดใช้งาน: &a{count}"
+info-system-enabled: "&eระบบเปิดใช้งาน: {status}"
+info-sell-system: "&eระบบขาย: {status}"
+info-effects: "&eเอฟเฟ็ก: {effects}"
+info-language: "&eภาษา: &a{language}"
+
+info-npc-name: "&eชื่อ: &a{name}"
+info-npc-enabled: "&eเปิดใช้งาน: {status}"
+info-npc-status: "&eสถานะ: {status}"
+info-npc-location: "&eตำแหน่ง: &7{location}"
+info-npc-custom-commands: "&eคำสั่งพิเศษ: {status}"
+info-npc-custom-prices: "&eราคาพิเศษ: {status}"
+info-npc-daily-interactions: "&eการโต้ตอบรายวัน: &a{count}"
+
+# Sample Prices
+sample-prices-header: "&eตัวอย่างราคา:"
+sample-prices-format: "&7  {item_name}: &a฿{price}"
+
+# Status Values
+status-yes: "&aใช่"
+status-no: "&cไม่ใช่"
+status-enabled: "&aเปิดใช้งาน"
+status-disabled: "&cปิดใช้งาน"
+status-online: "&aออนไลน์"
+status-offline: "&cออฟไลน์"
+
+# Time Formats
+time-seconds: "{time} วินาที"
+time-minutes: "{time} นาที"
+time-hours: "{time} ชั่วโมง"
+time-ago: "{time} ที่แล้ว"
+
+# Feature Not Implemented
+feature-not-implemented: "&eฟีเจอร์นี้ยังไม่ได้พัฒนา"
+export-not-implemented: "&eระบบส่งออกยังไม่ได้พัฒนา"
+import-not-implemented: "&eระบบนำเข้ายังไม่ได้พัฒนา"
+
+# Debug Messages
+debug-opened-gui: "&7[DEBUG] เปิดหน้าต่างขายให้ {player} กับ NPC {npc_id}"
+debug-cleaned-data: "&7[DEBUG] ทำความสะอาดข้อมูลของ {player}"
+debug-command-executed: "&7[DEBUG] รันคำสั่ง: {command}"
+debug-gui-click: "&7[DEBUG] คลิก GUI - ผู้เล่น: {player}, ช่อง: {slot}, การกระทำ: {action}"

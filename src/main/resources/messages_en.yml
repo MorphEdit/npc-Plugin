@@ -1,0 +1,195 @@
+# English Messages for NPCPlugin
+# ================================================================
+
+# Sell System Messages
+sell-success: "&aYou sold items for &e${total_price}&a!"
+sell-failed: "&cFailed to sell items!"
+no-items: "&cYou need to put items in the sell slots!"
+npc-disabled: "&cThis NPC is currently disabled!"
+sell-system-disabled: "&cThe sell system is currently disabled!"
+
+# Limits & Cooldowns
+daily-limit-reached: "&cYou have reached your daily selling limit of &e${daily_limit}&c!"
+cooldown-active: "&cPlease wait &e{cooldown} seconds &cbefore selling again!"
+confirmation-required: "&eYou are about to sell items worth &6${total_price}&e. &nClick again to confirm!"
+category-sold: "&aSold all &e{category} &aitems for &e${total_price}&a!"
+
+# GUI Messages
+gui-category-ores: "&6Ores & Minerals"
+gui-category-food: "&aFood & Crops"
+gui-category-tools: "&bTools & Weapons"
+gui-category-blocks: "&7Blocks & Materials"
+gui-category-misc: "&dMiscellaneous"
+
+gui-button-sell-all: "&a&lSell All Items"
+gui-button-sell-category: "&6&lSell Category"
+gui-button-price-info: "&e&lPrice Information"
+gui-button-compare-prices: "&b&lCompare Prices"
+gui-button-close: "&c&lClose"
+
+gui-lore-sell-all:
+  - "&7Put items in the slots above"
+  - "&7and click here to sell them!"
+  - ""
+  - "&aTotal Value: &e$0.00"
+  - ""
+  - "&eClick to sell!"
+
+gui-lore-category-sell:
+  - "&7Sell all items of current category"
+  - "&7from your inventory"
+  - ""
+  - "&eClick to sell all from category!"
+
+gui-lore-price-info:
+  - "&7View item prices for this NPC"
+  - ""
+  - "&eClick for prices!"
+
+gui-lore-compare-prices:
+  - "&7Compare prices with other NPCs"
+  - ""
+  - "&eClick to compare!"
+
+gui-lore-close:
+  - "&7Click to close this menu"
+
+# NPC Interaction Messages
+npc-greeting-default: "&aHello! Right-click to sell your items!"
+npc-no-permission: "&cYou don't have permission to trade with NPCs!"
+npc-not-found: "&cNo NPCs found nearby!"
+npc-get-closer: "&7Get closer to an NPC or specify an NPC ID: &e/sellnpc <id>"
+
+# Item Validation Messages
+item-not-sellable: "&cThis NPC doesn't buy {item_name}!"
+item-damaged-warning: "&eThis item is damaged and will sell for less!"
+inventory-full-warning: "&cYour inventory is full! Some items may be dropped."
+
+# Command Messages
+command-no-permission: "&cYou don't have permission to use this command!"
+command-only-players: "&cOnly players can use this command!"
+command-invalid-usage: "&cInvalid usage! Use &e{usage}"
+command-npc-not-found: "&cNPC '{npc_id}' not found!"
+command-npc-already-exists: "&cNPC with ID '{npc_id}' already exists!"
+command-invalid-npc-id: "&cInvalid NPC ID! Use only letters, numbers, and underscores."
+
+# Creation & Management
+npc-created: "&aSuccessfully created NPC '{npc_id}' with name: &e{npc_name}"
+npc-removed: "&aSuccessfully removed NPC '{npc_id}'"
+npc-toggled-enabled: "&aNPC '{npc_id}' is now &aenabled"
+npc-toggled-disabled: "&aNPC '{npc_id}' is now &cdisabled"
+npc-teleported: "&aTeleported to NPC '{npc_id}'!"
+npc-updated: "&aUpdated {property} for NPC '{npc_id}'"
+
+# System Messages
+system-reloading: "&eReloading NPC system..."
+system-reloaded: "&aNPC system reloaded successfully! ({duration}ms)"
+system-reload-error: "&cError reloading NPC system: {error}"
+system-validating: "&eValidating all NPCs..."
+system-validated: "&aNPC validation completed! ({duration}ms)"
+
+# Statistics Messages
+stats-daily-interactions: "&eDaily Interactions: &a{count}"
+stats-total-npcs: "&eTotal NPCs: &a{count}"
+stats-enabled-npcs: "&eEnabled NPCs: &a{count}"
+stats-last-interaction: "&eLast Interaction: &a{time}"
+stats-never: "&7Never"
+stats-reset: "&aStats reset for {target}!"
+
+# Price Information
+price-info-header: "&6=== Price Information ==="
+price-info-trading-with: "&eTrading with: &a{npc_name}"
+price-info-item-format: "&b{item_name}: &a${price}"
+price-info-no-prices: "&7No items available for sale to this NPC"
+price-info-put-items: "&7Put items in the GUI to see their exact prices!"
+
+# Price Comparison
+price-comparison-header: "&6=== Price Comparison ==="
+price-comparison-item-header: "&e{item_name}:"
+price-comparison-no-buyers: "&7No NPCs buy this item"
+price-comparison-format: "&b  {npc_name}: &a${price}"
+
+# Error Messages
+error-occurred: "&cAn error occurred: {error}"
+error-gui: "&cAn error occurred with the sell GUI. Please try again."
+error-effects: "&cError playing {effect_type} effects: {error}"
+error-hologram: "&cError with hologram system: {error}"
+
+# Success Messages
+effects-played: "&aPlayed {effect_type} effect for NPC '{npc_id}'"
+hologram-updated: "&aUpdated hologram for NPC '{npc_id}'"
+config-reloaded: "&aConfiguration reloaded successfully!"
+
+# Validation Messages
+validation-invalid-world: "&cInvalid world '{world}' for NPC '{npc_id}'"
+validation-invalid-entity: "&cInvalid entity type '{entity_type}' for NPC '{npc_id}'"
+validation-respawned: "&aRespawned {count} NPCs"
+
+# Help Messages
+help-header: "&6=== NPC Commands ==="
+help-create: "&e/npc create <id> <name> &7- Create new NPC"
+help-remove: "&e/npc remove <id> &7- Remove NPC"
+help-list: "&e/npc list [filter] &7- List NPCs"
+help-toggle: "&e/npc toggle <id> &7- Enable/disable NPC"
+help-info: "&e/npc info [id] &7- Show NPC information"
+help-reload: "&e/npc reload &7- Reload NPC system"
+help-validate: "&e/npc validate &7- Validate and respawn NPCs"
+help-teleport: "&e/npc teleport <id> &7- Teleport to NPC"
+help-stats: "&e/npc stats [id] &7- Show statistics"
+help-edit: "&e/npc edit <id> <property> <value> &7- Edit NPC"
+help-effects: "&e/npc effects <id> <type> &7- Test effects"
+help-footer: "&7Use &e/sellnpc &7to trade with NPCs"
+
+# List Command
+list-header: "&6=== NPCs ({shown}/{total}) ==="
+list-no-npcs: "&eNo NPCs found."
+list-no-filter-match: "&eNo NPCs found matching filter: {filter}"
+list-format: "&b{npc_id} &f- {npc_name} {status}{interactions}"
+list-interactions-format: "&a ({count} interactions)"
+
+# Info Display
+info-system-header: "&6=== NPC System Info ==="
+info-npc-header: "&6=== NPC Info: {npc_id} ==="
+info-total-npcs: "&eTotal NPCs: &a{count}"
+info-enabled-npcs: "&eEnabled NPCs: &a{count}"
+info-system-enabled: "&eSystem Enabled: {status}"
+info-sell-system: "&eSell System: {status}"
+info-effects: "&eEffects: {effects}"
+info-language: "&eLanguage: &a{language}"
+
+info-npc-name: "&eName: &a{name}"
+info-npc-enabled: "&eEnabled: {status}"
+info-npc-status: "&eStatus: {status}"
+info-npc-location: "&eLocation: &7{location}"
+info-npc-custom-commands: "&eCustom Commands: {status}"
+info-npc-custom-prices: "&eCustom Prices: {status}"
+info-npc-daily-interactions: "&eDaily Interactions: &a{count}"
+
+# Sample Prices
+sample-prices-header: "&eSample Prices:"
+sample-prices-format: "&7  {item_name}: &a${price}"
+
+# Status Values
+status-yes: "&aYes"
+status-no: "&cNo"
+status-enabled: "&aEnabled"
+status-disabled: "&cDisabled"
+status-online: "&aOnline"
+status-offline: "&cOffline"
+
+# Time Formats
+time-seconds: "{time}s"
+time-minutes: "{time}m"
+time-hours: "{time}h"
+time-ago: "{time} ago"
+
+# Feature Not Implemented
+feature-not-implemented: "&eThis feature is not implemented yet"
+export-not-implemented: "&eExport functionality not implemented yet"
+import-not-implemented: "&eImport functionality not implemented yet"
+
+# Debug Messages
+debug-opened-gui: "&7[DEBUG] Opened sell GUI for {player} with NPC {npc_id}"
+debug-cleaned-data: "&7[DEBUG] Cleaned up data for {player}"
+debug-command-executed: "&7[DEBUG] Executed command: {command}"
+debug-gui-click: "&7[DEBUG] GUI Click - Player: {player}, Slot: {slot}, Action: {action}"

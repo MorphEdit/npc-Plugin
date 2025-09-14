@@ -5,6 +5,7 @@
 plugin:
   enabled: true
   debug: false
+  language: "en"  # en, th
 
 # NPC Settings
 npc:
@@ -12,14 +13,60 @@ npc:
   look-distance: 5.0
   update-interval: 10
 
+  # Visual Effects
+  effects:
+    particles: true
+    sounds: true
+    holograms: true
+
 # Sell System
 sell-system:
   enabled: true
 
+  # Limits & Cooldowns
+  limits:
+    enabled: true
+    daily-limit: 10000.0  # Maximum sell amount per day per player
+    cooldown: 30          # Seconds between sells
+    reset-time: "00:00"   # Daily reset time (HH:MM)
+
   # GUI Settings
   gui:
     title: "&aSell Items to {npc_name}"
-    size: 27  # 3 rows
+    size: 54  # 6 rows for better organization
+
+    # Categories
+    categories:
+      enabled: true
+      show-all: true      # Show "All Items" category
+      items:
+        ores:
+          name: "&6Ores & Minerals"
+          icon: "IRON_ORE"
+          slot: 45
+        food:
+          name: "&aFood & Crops"
+          icon: "WHEAT"
+          slot: 46
+        tools:
+          name: "&bTools & Weapons"
+          icon: "IRON_PICKAXE"
+          slot: 47
+        blocks:
+          name: "&7Blocks & Materials"
+          icon: "COBBLESTONE"
+          slot: 48
+        misc:
+          name: "&dMiscellaneous"
+          icon: "EMERALD"
+          slot: 49
+
+  # Advanced Features
+  features:
+    real-time-preview: true    # Show total value while placing items
+    category-sell-all: true    # Sell all items of specific category
+    confirmation-dialog: true  # Confirm before selling expensive items
+    price-comparison: true     # Show price differences between NPCs
 
   # Commands to run when player sells (supports placeholders)
   sell-commands:
@@ -32,6 +79,72 @@ sell-system:
     sell-failed: "&cFailed to sell items!"
     no-items: "&cYou need to put items in the sell slots!"
     npc-disabled: "&cThis NPC is currently disabled!"
+    daily-limit-reached: "&cYou have reached your daily selling limit of ${daily_limit}!"
+    cooldown-active: "&cPlease wait {cooldown} seconds before selling again!"
+    confirmation-required: "&eYou are about to sell items worth &6${total_price}&e. Click again to confirm!"
+    category-sold: "&aSold all {category} items for &e${total_price}&a!"
+
+# Item Categories
+item-categories:
+  ores:
+    - COAL
+    - IRON_ORE
+    - GOLD_ORE
+    - DIAMOND_ORE
+    - EMERALD_ORE
+    - LAPIS_ORE
+    - REDSTONE_ORE
+    - COPPER_ORE
+    - ANCIENT_DEBRIS
+
+  food:
+    - WHEAT
+    - CARROT
+    - POTATO
+    - BEETROOT
+    - BEEF
+    - PORK
+    - CHICKEN
+    - MUTTON
+    - FISH
+    - BREAD
+    - APPLE
+    - GOLDEN_APPLE
+
+  tools:
+    - WOODEN_PICKAXE
+    - STONE_PICKAXE
+    - IRON_PICKAXE
+    - GOLDEN_PICKAXE
+    - DIAMOND_PICKAXE
+    - NETHERITE_PICKAXE
+    - WOODEN_SWORD
+    - STONE_SWORD
+    - IRON_SWORD
+    - GOLDEN_SWORD
+    - DIAMOND_SWORD
+    - NETHERITE_SWORD
+
+  blocks:
+    - COBBLESTONE
+    - STONE
+    - DIRT
+    - SAND
+    - GRAVEL
+    - WOOD
+    - PLANKS
+    - GLASS
+    - WOOL
+
+  misc:
+    - EMERALD
+    - DIAMOND
+    - GOLD_INGOT
+    - IRON_INGOT
+    - STRING
+    - LEATHER
+    - FEATHER
+    - BONE
 
 # Item Prices
 item-prices:
@@ -39,26 +152,91 @@ item-prices:
   COBBLESTONE: 0.10
   STONE: 0.20
   DIRT: 0.05
+  SAND: 0.15
+  GRAVEL: 0.12
 
   # Ores
   COAL: 1.00
   IRON_ORE: 3.00
   GOLD_ORE: 5.00
   DIAMOND_ORE: 15.00
+  EMERALD_ORE: 20.00
+  LAPIS_ORE: 2.50
+  REDSTONE_ORE: 2.00
+  COPPER_ORE: 1.50
+  ANCIENT_DEBRIS: 50.00
 
   # Ingots
   IRON_INGOT: 4.00
   GOLD_INGOT: 6.00
   DIAMOND: 20.00
+  EMERALD: 25.00
+  NETHERITE_INGOT: 100.00
 
   # Food
   WHEAT: 1.50
   CARROT: 1.00
   POTATO: 1.00
   BEEF: 3.00
+  PORK: 2.50
+  CHICKEN: 2.00
+  BREAD: 2.00
 
-  # Tools
+  # Tools (base prices, affected by durability)
   IRON_PICKAXE: 10.00
   IRON_SWORD: 8.00
   DIAMOND_PICKAXE: 25.00
   DIAMOND_SWORD: 30.00
+  NETHERITE_PICKAXE: 75.00
+  NETHERITE_SWORD: 85.00
+
+# NPC Skin Support
+npc-skins:
+  enabled: true
+  default-skin: "MHF_Villager"  # Default Minecraft head
+
+  # Custom skins for NPCs (player names or texture URLs)
+  custom-skins:
+    trader1: "MHF_Villager"
+    miner_npc: "MHF_Steve"
+    # farmer_npc: "texture_url_here"
+
+# Sound Effects
+sounds:
+  sell-success: "ENTITY_VILLAGER_YES"
+  sell-failed: "ENTITY_VILLAGER_NO"
+  gui-open: "BLOCK_CHEST_OPEN"
+  gui-close: "BLOCK_CHEST_CLOSE"
+  button-click: "UI_BUTTON_CLICK"
+  category-switch: "ITEM_BOOK_PAGE_TURN"
+
+# Particle Effects
+particles:
+  sell-success:
+    type: "VILLAGER_HAPPY"
+    count: 10
+    offset: 0.5
+
+  npc-idle:
+    type: "ENCHANTMENT_TABLE"
+    count: 2
+    offset: 0.3
+    interval: 100  # ticks between particles
+
+# Hologram Settings
+holograms:
+  enabled: true
+  height-offset: 2.5
+  update-interval: 60  # seconds
+
+  # Lines to display above NPC
+  lines:
+    - "&6{npc_name}"
+    - "&aClick to Trade!"
+    - "&7Items Sold Today: {daily_count}"
+
+  # Sample prices to show
+  show-prices:
+    enabled: true
+    max-items: 3
+    format: "&e{item}: &6${price}"
