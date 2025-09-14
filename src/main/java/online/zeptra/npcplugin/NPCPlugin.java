@@ -74,11 +74,13 @@ public final class NPCPlugin extends JavaPlugin {
             // Stop system tasks
             stopSystemTasks();
 
+            // **แก้ไข: เรียก shutdown method ใหม่**
+            if (npcManager != null) {
+                npcManager.shutdown();
+            }
+
             // Save all data
             saveAllData();
-
-            // Remove all NPCs
-            cleanupNPCs();
 
             // Cleanup player data
             cleanupPlayerData();
@@ -223,8 +225,8 @@ public final class NPCPlugin extends JavaPlugin {
             }
         };
 
-        // Auto-save every 5 minutes
-        saveTask.runTaskTimer(this, 20L * 60L * 5L, 20L * 60L * 5L);
+        // **แก้ไข: ลดเวลา auto-save เหลือ 1 นาที**
+        saveTask.runTaskTimer(this, 20L * 60L, 20L * 60L); // ทุก 1 นาที
     }
 
     private void startValidationTask() {
@@ -238,7 +240,7 @@ public final class NPCPlugin extends JavaPlugin {
                     getLogger().warning("NPC validation failed: " + e.getMessage());
                 }
             }
-        }.runTaskTimer(this, 20L * 60L, 20L * 60L * 10L); // Every 10 minutes
+        }.runTaskTimer(this, 20L * 60L, 20L * 60L * 5L); // ทุก 5 นาที
     }
 
     private void setupMetrics() {
@@ -287,31 +289,27 @@ public final class NPCPlugin extends JavaPlugin {
 
     private void saveAllData() {
         try {
-            // Save NPC configurations
-            configManager.saveNPCsConfig();
+            // **แก้ไข: บังคับ save NPCs ก่อน**
+            if (configManager != null) {
+                configManager.saveNPCsConfig();
+            }
 
             // Save player data (if implemented)
-            for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
-                playerDataManager.savePlayerData(player);
+            if (playerDataManager != null) {
+                for (org.bukkit.entity.Player player : Bukkit.getOnlinePlayers()) {
+                    playerDataManager.savePlayerData(player);
+                }
             }
 
             configManager.debugLog("All data saved successfully");
 
         } catch (Exception e) {
             getLogger().warning("Failed to save data: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void cleanupNPCs() {
-        if (npcManager != null) {
-            try {
-                npcManager.removeAllNPCs();
-                getLogger().info("All NPCs removed successfully");
-            } catch (Exception e) {
-                getLogger().warning("Failed to cleanup NPCs: " + e.getMessage());
-            }
-        }
-    }
+    // **ลบเมธอด cleanupNPCs เพราะเราใช้ shutdown แทน**
 
     private void cleanupPlayerData() {
         if (playerDataManager != null) {
@@ -352,8 +350,10 @@ public final class NPCPlugin extends JavaPlugin {
             // Save current data
             saveAllData();
 
-            // Remove NPCs
-            npcManager.removeAllNPCs();
+            // Remove NPCs properly
+            if (npcManager != null) {
+                npcManager.shutdown();
+            }
 
             // Reload configurations
             configManager.reloadConfigs();
@@ -369,6 +369,7 @@ public final class NPCPlugin extends JavaPlugin {
 
         } catch (Exception e) {
             getLogger().severe("Failed to reload plugin: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -412,7 +413,9 @@ public final class NPCPlugin extends JavaPlugin {
             saveAllData();
 
             // Remove NPCs
-            cleanupNPCs();
+            if (npcManager != null) {
+                npcManager.shutdown();
+            }
 
             // Disable plugin
             getServer().getPluginManager().disablePlugin(this);

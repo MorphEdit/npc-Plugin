@@ -18,6 +18,10 @@ public class TraderNPC {
     private boolean enabled;
     private final ConfigManager config;
 
+    // **แก้ไข: เพิ่มการตรวจสอบ UUID เพื่อป้องกัน spawn ซ้ำ**
+    private UUID entityUUID;
+    private boolean isSpawning = false;
+
     // Hologram support
     private List<ArmorStand> hologramLines = new ArrayList<>();
     private BukkitTask hologramUpdateTask;
@@ -42,15 +46,45 @@ public class TraderNPC {
     }
 
     public boolean spawn() {
+        // **แก้ไข: ป้องกัน spawn ซ้ำ**
+        if (isSpawning) {
+            config.debugLog("NPC " + id + " is already spawning, skipping...");
+            return false;
+        }
+
+        if (entity != null && entity.isValid()) {
+            config.debugLog("NPC " + id + " already exists and is valid, skipping spawn");
+            return true;
+        }
+
         try {
-            if (entity != null && entity.isValid()) {
+            isSpawning = true;
+
+            // ลบ entity เก่าถ้ามี
+            if (entity != null) {
                 entity.remove();
+                entity = null;
+                entityUUID = null;
             }
 
             String entityTypeStr = config.getNPCEntityType(id);
-            EntityType entityType = EntityType.valueOf(entityTypeStr.toUpperCase());
+            EntityType entityType;
+
+            try {
+                entityType = EntityType.valueOf(entityTypeStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                config.debugLog("Invalid entity type " + entityTypeStr + " for NPC " + id + ", using VILLAGER");
+                entityType = EntityType.VILLAGER;
+            }
+
+            // **แก้ไข: ตรวจสอบให้แน่ใจว่า location ถูกต้อง**
+            if (location.getWorld() == null) {
+                config.debugLog("World is null for NPC " + id);
+                return false;
+            }
 
             entity = (LivingEntity) location.getWorld().spawnEntity(location, entityType);
+            entityUUID = entity.getUniqueId();
 
             setupNPCProperties();
             applySkin();
@@ -64,16 +98,21 @@ public class TraderNPC {
                 startParticleEffects();
             }
 
-            config.debugLog("Spawned NPC: " + id + " at " + location);
+            config.debugLog("Successfully spawned NPC: " + id + " with UUID: " + entityUUID);
             return true;
 
         } catch (Exception e) {
             config.debugLog("Failed to spawn NPC " + id + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
+        } finally {
+            isSpawning = false;
         }
     }
 
     private void setupNPCProperties() {
+        if (entity == null) return;
+
         entity.setCustomName(ChatColor.translateAlternateColorCodes('&', name));
         entity.setCustomNameVisible(true);
         entity.setAI(false);
@@ -81,6 +120,9 @@ public class TraderNPC {
         entity.setCollidable(false);
         entity.setSilent(true);
         entity.setGravity(false);
+
+        // **แก้ไข: เพิ่ม persistent เพื่อไม่ให้หายเวลา chunk unload**
+        entity.setPersistent(true);
 
         if (entity instanceof Villager) {
             Villager villager = (Villager) entity;
@@ -153,6 +195,8 @@ public class TraderNPC {
         }
 
         World world = location.getWorld();
+        if (world == null) return;
+
         double baseY = location.getY() + config.getHologramHeightOffset();
 
         for (int i = 0; i < lines.size(); i++) {
@@ -178,6 +222,8 @@ public class TraderNPC {
         hologram.setInvulnerable(true);
         hologram.setCollidable(false);
         hologram.setSilent(true);
+        // **แก้ไข: เพิ่ม persistent สำหรับ hologram ด้วย**
+        hologram.setPersistent(true);
 
         String processedText = processHologramText(text);
         hologram.setCustomName(ChatColor.translateAlternateColorCodes('&', processedText));
@@ -352,14 +398,17 @@ public class TraderNPC {
     }
 
     public void remove() {
+        config.debugLog("Removing NPC: " + id);
+
         if (entity != null && entity.isValid()) {
             entity.remove();
-            config.debugLog("Removed NPC: " + id);
+            config.debugLog("Removed NPC entity: " + id);
         }
 
         removeHologram();
         stopTasks();
         entity = null;
+        entityUUID = null;
     }
 
     private void removeHologram() {
@@ -521,16 +570,34 @@ public class TraderNPC {
         this.enabled = enabled;
     }
 
+    // **แก้ไข: ปรับปรุงการตรวจสอบ valid**
     public boolean isValid() {
-        return entity != null && entity.isValid() && !entity.isDead();
+        if (entity == null) return false;
+        if (!entity.isValid()) return false;
+        if (entity.isDead()) return false;
+
+        // ตรวจสอบ UUID ด้วย
+        if (entityUUID != null && !entityUUID.equals(entity.getUniqueId())) {
+            config.debugLog("UUID mismatch for NPC " + id + ", entity may be corrupted");
+            return false;
+        }
+
+        return true;
     }
 
     public UUID getEntityUUID() {
-        return entity != null ? entity.getUniqueId() : null;
+        return entityUUID;
     }
 
+    // **แก้ไข: ปรับปรุงการเปรียบเทียบ entity**
     public boolean isThisEntity(LivingEntity checkEntity) {
-        return entity != null && entity.equals(checkEntity);
+        if (entity == null || checkEntity == null) return false;
+
+        // ตรวจสอบทั้ง reference และ UUID
+        if (entity.equals(checkEntity)) return true;
+        if (entityUUID != null && entityUUID.equals(checkEntity.getUniqueId())) return true;
+
+        return false;
     }
 
     public List<ArmorStand> getHologramLines() {
@@ -545,6 +612,7 @@ public class TraderNPC {
                 ", enabled=" + enabled +
                 ", valid=" + isValid() +
                 ", interactions=" + dailyInteractionCount +
+                ", uuid=" + entityUUID +
                 '}';
     }
 }

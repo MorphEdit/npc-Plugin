@@ -92,6 +92,7 @@ public class NPCManager {
 
         } catch (Exception e) {
             plugin.getLogger().severe("Error loading NPC " + npcId + ": " + e.getMessage());
+            e.printStackTrace(); // เพิ่ม stack trace เพื่อ debug
             return false;
         }
     }
@@ -117,7 +118,16 @@ public class NPCManager {
         config.getNPCsConfig().set(path + ".settings.greeting", "&aHello! Right-click to sell your items!");
         config.getNPCsConfig().set(path + ".settings.custom-prices", false);
 
+        // **แก้ไข: บังคับ save ทันที**
         config.saveNPCsConfig();
+
+        // รอหน่อยก่อน load เพื่อให้ไฟล์ถูกเขียนเสร็จ
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         return loadNPC(npcId);
     }
 
@@ -127,6 +137,7 @@ public class NPCManager {
             npc.remove();
 
             config.getNPCsConfig().set("npcs." + npcId, null);
+            // **แก้ไข: บังคับ save ทันที**
             config.saveNPCsConfig();
 
             config.debugLog("Removed NPC: " + npcId);
@@ -161,6 +172,7 @@ public class NPCManager {
         if (npc != null) {
             boolean newState = !config.isNPCEnabled(npcId);
             config.getNPCsConfig().set("npcs." + npcId + ".enabled", newState);
+            // **แก้ไข: บังคับ save ทันที**
             config.saveNPCsConfig();
 
             if (newState) {
@@ -198,6 +210,16 @@ public class NPCManager {
         }
 
         config.debugLog("Removed all NPCs");
+    }
+
+    // **แก้ไข: เพิ่มเมธอด shutdown เพื่อบังคับ save ก่อนปิดเซิร์ฟเวอร์**
+    public void shutdown() {
+        removeAllNPCs();
+
+        // บังคับ save ข้อมูล NPC ทั้งหมดก่อนปิด
+        config.saveNPCsConfig();
+
+        plugin.getLogger().info("NPCManager shutdown completed - All NPCs saved");
     }
 
     private void startLookTask() {

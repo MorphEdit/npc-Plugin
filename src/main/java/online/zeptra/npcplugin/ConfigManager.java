@@ -36,6 +36,7 @@ public class ConfigManager {
         loadNPCsConfig();
         loadMessagesConfig();
         clearCaches();
+        validateConfigFiles(); // เพิ่มการตรวจสอบไฟล์
         plugin.getLogger().info("Configuration files loaded successfully!");
     }
 
@@ -84,11 +85,69 @@ public class ConfigManager {
         }
     }
 
+    // **แก้ไข: ปรับปรุงเมธอด saveNPCsConfig**
     public void saveNPCsConfig() {
+        if (npcsFile == null || npcsConfig == null) {
+            plugin.getLogger().warning("NPCs config not initialized, cannot save");
+            return;
+        }
+
         try {
+            // สร้าง parent directory ถ้าไม่มี
+            if (!npcsFile.getParentFile().exists()) {
+                npcsFile.getParentFile().mkdirs();
+            }
+
             npcsConfig.save(npcsFile);
+            debugLog("Saved NPCs config to: " + npcsFile.getAbsolutePath());
+
         } catch (IOException e) {
             plugin.getLogger().severe("Could not save npcs.yml: " + e.getMessage());
+            e.printStackTrace();
+
+            // พยายาม backup และ save อีกครั้ง
+            try {
+                String backupName = "npcs_backup_" + System.currentTimeMillis() + ".yml";
+                File backupFile = new File(plugin.getDataFolder(), backupName);
+                npcsConfig.save(backupFile);
+                plugin.getLogger().info("Created backup at: " + backupName);
+            } catch (IOException backupError) {
+                plugin.getLogger().severe("Failed to create backup: " + backupError.getMessage());
+            }
+        }
+    }
+
+    // **เพิ่ม: เมธอดสำหรับตรวจสอบไฟล์**
+    public void validateConfigFiles() {
+        // ตรวจสอบไฟล์ npcs.yml
+        if (!npcsFile.exists()) {
+            plugin.getLogger().warning("npcs.yml does not exist, creating new file");
+            npcsConfig = new YamlConfiguration();
+            npcsConfig.set("npcs", new HashMap<>());
+            saveNPCsConfig();
+        }
+
+        // ตรวจสอบว่าไฟล์อ่านได้
+        if (!npcsFile.canRead()) {
+            plugin.getLogger().severe("Cannot read npcs.yml file!");
+        }
+
+        if (!npcsFile.canWrite()) {
+            plugin.getLogger().severe("Cannot write to npcs.yml file!");
+        }
+
+        debugLog("Config files validation completed");
+    }
+
+    // **เพิ่ม: เมธอดสำหรับ force reload**
+    public void forceReloadNPCs() {
+        try {
+            if (npcsFile.exists()) {
+                npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
+                plugin.getLogger().info("Force reloaded npcs.yml");
+            }
+        } catch (Exception e) {
+            plugin.getLogger().severe("Error force reloading NPCs config: " + e.getMessage());
         }
     }
 
@@ -98,6 +157,7 @@ public class ConfigManager {
         npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
         loadMessagesConfig();
         clearCaches();
+        validateConfigFiles(); // เพิ่มการตรวจสอบ
         plugin.getLogger().info("Configuration reloaded!");
     }
 
@@ -405,6 +465,79 @@ public class ConfigManager {
         return npcsConfig.getStringList("npcs." + npcId + ".custom-commands");
     }
 
+    // **เพิ่ม: เมธอดสำหรับการ backup**
+    public boolean createBackup() {
+        try {
+            String backupName = "config_backup_" + System.currentTimeMillis() + ".yml";
+            File backupDir = new File(plugin.getDataFolder(), "backups");
+
+            if (!backupDir.exists()) {
+                backupDir.mkdirs();
+            }
+
+            File configBackup = new File(backupDir, "config_" + backupName);
+            File npcsBackup = new File(backupDir, "npcs_" + backupName);
+
+            config.save(configBackup);
+            npcsConfig.save(npcsBackup);
+
+            plugin.getLogger().info("Configuration backup created: " + backupName);
+            return true;
+
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to create backup: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // **เพิ่ม: เมธอดสำหรับการ restore**
+    public boolean restoreFromBackup(String backupName) {
+        try {
+            File backupDir = new File(plugin.getDataFolder(), "backups");
+            File configBackup = new File(backupDir, "config_" + backupName);
+            File npcsBackup = new File(backupDir, "npcs_" + backupName);
+
+            if (!configBackup.exists() || !npcsBackup.exists()) {
+                plugin.getLogger().warning("Backup files not found: " + backupName);
+                return false;
+            }
+
+            // Load from backup
+            config = YamlConfiguration.loadConfiguration(configBackup);
+            npcsConfig = YamlConfiguration.loadConfiguration(npcsBackup);
+
+            // Save as current config
+            config.save(new File(plugin.getDataFolder(), "config.yml"));
+            npcsConfig.save(npcsFile);
+
+            clearCaches();
+            plugin.getLogger().info("Configuration restored from backup: " + backupName);
+            return true;
+
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to restore from backup: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // **เพิ่ม: เมธอดสำหรับรายการ backup**
+    public List<String> getAvailableBackups() {
+        File backupDir = new File(plugin.getDataFolder(), "backups");
+        List<String> backups = new java.util.ArrayList<>();
+
+        if (backupDir.exists() && backupDir.isDirectory()) {
+            for (File file : backupDir.listFiles()) {
+                String name = file.getName();
+                if (name.startsWith("config_") && name.endsWith(".yml")) {
+                    String backupName = name.substring(7, name.length() - 4);
+                    backups.add(backupName);
+                }
+            }
+        }
+
+        return backups;
+    }
+
     // Utility Methods
     public void debugLog(String message) {
         if (isDebugMode()) {
@@ -427,5 +560,69 @@ public class ConfigManager {
 
     public void invalidateMessageCache() {
         messageCache.clear();
+    }
+
+    // **เพิ่ม: เมธอดสำหรับตรวจสอบ config integrity**
+    public boolean validateConfigIntegrity() {
+        boolean valid = true;
+
+        try {
+            // ตรวจสอบ required sections
+            if (!config.contains("plugin")) {
+                plugin.getLogger().warning("Missing 'plugin' section in config.yml");
+                valid = false;
+            }
+
+            if (!config.contains("sell-system")) {
+                plugin.getLogger().warning("Missing 'sell-system' section in config.yml");
+                valid = false;
+            }
+
+            if (!config.contains("item-prices")) {
+                plugin.getLogger().warning("Missing 'item-prices' section in config.yml");
+                valid = false;
+            }
+
+            // ตรวจสอบ npcs.yml
+            if (npcsConfig == null) {
+                plugin.getLogger().warning("NPCs config is null");
+                valid = false;
+            }
+
+            if (valid) {
+                debugLog("Configuration integrity check passed");
+            } else {
+                plugin.getLogger().warning("Configuration integrity check failed!");
+            }
+
+        } catch (Exception e) {
+            plugin.getLogger().severe("Error during config integrity check: " + e.getMessage());
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    // **เพิ่ม: เมธอดสำหรับ cleanup cache เก่า**
+    public void cleanupOldCaches() {
+        // ลบ cache entries ที่ไม่ได้ใช้
+        priceCache.entrySet().removeIf(entry -> !hasItemPrice(entry.getKey()));
+
+        debugLog("Cleaned up old cache entries");
+    }
+
+    // **เพิ่ม: เมธอดสำหรับ statistics**
+    public Map<String, Object> getConfigStats() {
+        Map<String, Object> stats = new HashMap<>();
+
+        stats.put("cached_prices", priceCache.size());
+        stats.put("cached_messages", messageCache.size());
+        stats.put("cached_categories", categoryCache.size());
+        stats.put("config_file_size", new File(plugin.getDataFolder(), "config.yml").length());
+        stats.put("npcs_file_size", npcsFile.length());
+        stats.put("debug_mode", isDebugMode());
+        stats.put("language", getLanguage());
+
+        return stats;
     }
 }
