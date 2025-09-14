@@ -1,0 +1,64 @@
+# NPCPlugin Configuration File
+# ================================================================
+
+# Plugin Settings
+plugin:
+  enabled: true
+  debug: false
+
+# NPC Settings
+npc:
+  enabled: true
+  look-distance: 5.0
+  update-interval: 10
+
+# Sell System
+sell-system:
+  enabled: true
+
+  # GUI Settings
+  gui:
+    title: "&aSell Items to {npc_name}"
+    size: 27  # 3 rows
+
+  # Commands to run when player sells (supports placeholders)
+  sell-commands:
+    - "eco give {player} {total_price}"
+    - "broadcast {player} sold items for ${total_price} to {npc_name}!"
+
+  # Message settings
+  messages:
+    sell-success: "&aYou sold items for &e${total_price}&a!"
+    sell-failed: "&cFailed to sell items!"
+    no-items: "&cYou need to put items in the sell slots!"
+    npc-disabled: "&cThis NPC is currently disabled!"
+
+# Item Prices
+item-prices:
+  # Basic Items
+  COBBLESTONE: 0.10
+  STONE: 0.20
+  DIRT: 0.05
+
+  # Ores
+  COAL: 1.00
+  IRON_ORE: 3.00
+  GOLD_ORE: 5.00
+  DIAMOND_ORE: 15.00
+
+  # Ingots
+  IRON_INGOT: 4.00
+  GOLD_INGOT: 6.00
+  DIAMOND: 20.00
+
+  # Food
+  WHEAT: 1.50
+  CARROT: 1.00
+  POTATO: 1.00
+  BEEF: 3.00
+
+  # Tools
+  IRON_PICKAXE: 10.00
+  IRON_SWORD: 8.00
+  DIAMOND_PICKAXE: 25.00
+  DIAMOND_SWORD: 30.00

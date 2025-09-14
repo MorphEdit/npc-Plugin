@@ -1,0 +1,62 @@
+# NPC Definitions
+# ================================================================
+
+npcs:
+  # NPC ID: trader1
+  trader1:
+    enabled: true
+    name: "&6General Trader"
+
+    # Location (set when spawning)
+    location:
+      world: "world"
+      x: 0
+      y: 64
+      z: 0
+      yaw: 0
+      pitch: 0
+
+    # NPC Type
+    entity-type: "VILLAGER"
+    profession: "FARMER"
+
+    # Settings
+    settings:
+      greeting: "&aHello! Right-click to sell your items!"
+      custom-prices: false  # Use global prices
+
+    # Custom commands (optional - overrides global)
+    custom-commands: []
+
+  # NPC ID: miner_npc
+  miner_npc:
+    enabled: false
+    name: "&8Ore Buyer"
+
+    location:
+      world: "world"
+      x: 100
+      y: 64
+      z: 100
+      yaw: 90
+      pitch: 0
+
+    entity-type: "VILLAGER"
+    profession: "TOOLSMITH"
+
+    settings:
+      greeting: "&8I buy ores and minerals!"
+      custom-prices: true  # Use custom prices below
+
+    # Custom prices for this NPC only
+    item-prices:
+      COAL: 1.50
+      IRON_ORE: 4.00
+      GOLD_ORE: 7.00
+      DIAMOND_ORE: 20.00
+
+    # Custom commands for this NPC
+    custom-commands:
+      - "eco give {player} {total_price}"
+      - "title {player} title '&6Sold!'"
+      - "title {player} subtitle '&aEarned ${total_price}'"

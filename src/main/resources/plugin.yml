@@ -1,0 +1,32 @@
+name: NPCPlugin
+version: '${version}'
+main: online.zeptra.npcplugin.NPCPlugin
+api-version: '1.20'
+description: Simple NPC Seller Plugin
+author: MorphEdit
+
+commands:
+  npc:
+    description: Manage NPCs
+    usage: /npc <create|remove|list|reload> [args]
+    permission: npcplugin.npc
+
+  sellnpc:
+    description: Open sell GUI for nearest NPC
+    usage: /sellnpc [npc-id]
+    permission: npcplugin.sell
+
+permissions:
+  npcplugin.*:
+    description: All permissions
+    children:
+      npcplugin.npc: true
+      npcplugin.sell: true
+
+  npcplugin.npc:
+    description: NPC management
+    default: op
+
+  npcplugin.sell:
+    description: Sell items to NPCs
+    default: true
